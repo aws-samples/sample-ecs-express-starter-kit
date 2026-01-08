@@ -5,3 +5,7 @@ Total time: 1.5 hours of interactive presentation
 
 SUP Audience:
 Data Scientist, ML Engineers, Developers, Architects, CTOs
+
+-- Deep Dive
+Optimise hybrid inferencing -
+Model choice for your    AI Infereincing.

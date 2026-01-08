@@ -33,8 +33,8 @@ locals {
 
 variable "app_image" {
   description = "Container image for primary container"
-  default     = "public.ecr.aws/p7b6k2h9/mod-app:0.0.6"
-  # default     = "public.ecr.aws/p7b6k2h9/mod-app:0.1.1" with cognito
+  # default     = "public.ecr.aws/p7b6k2h9/mod-app:0.0.6" no ss0
+  default     = "public.ecr.aws/p7b6k2h9/mod-app:0.1.4" # with auth0
 }
 
 variable "container_port" {
@@ -69,21 +69,25 @@ variable "password_length" {
 #   default     = []
 # }
 
-# Cognito SSO Variables
-# Additional callback/logout URLs (e.g., for local development)
-variable "additional_callback_urls" {
-  description = "Additional callback URLs for Cognito OAuth (e.g., localhost for development)"
-  type        = list(string)
-  default     = ["http://localhost:8000/auth/callback"]
+# Auth0
+variable "auth0_domain" {
+  description = "Auth0 tenant domain (e.g., your-tenant.auth0.com)"
+  type        = string
 }
 
-variable "additional_logout_urls" {
-  description = "Additional logout URLs for Cognito (e.g., localhost for development)"
-  type        = list(string)
-  default     = ["http://localhost:8000/logout", "http://localhost:8000"]
+variable "auth0_client_id" {
+  description = "Auth0 application client ID"
+  type        = string
 }
 
+variable "auth0_client_secret" {
+  description = "Auth0 application client secret"
+  type        = string
+  sensitive   = true
+}
 
-variable "test_user_email" {
-  default = "test@example.com" 
+variable "APP_SECRET_GEN" {
+  description = "Generated APP_SECRET"
+  type        = string
+  sensitive   = true
 }

@@ -1,0 +1,8 @@
+iac/.terraform
+iac/terraform.tfstate*
+iac/.terraform.lock.hcl
+notes.txt
+iac/terraform.tfvars
+app/.venv
+__pycache__
+.kiro/settings/mcp.json

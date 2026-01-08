@@ -3,3 +3,8 @@ uvicorn
 psycopg2-binary
 python-jose[cryptography]
 requests
+authlib
+httpx
+python-dotenv
+itsdangerous
+starlette
