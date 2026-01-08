@@ -5,4 +5,4 @@ notes.txt
 iac/terraform.tfvars
 app/.venv
 __pycache__
-.kiro/settings/mcp.json
+.kiro
