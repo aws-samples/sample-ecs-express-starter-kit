@@ -1,3 +1,5 @@
+**NOTE — Reference only (Not production ready):** This repository is a starter/boilerplate for development and demos. Do NOT use the default configuration, credentials, or secrets in production. 
+
 # ECS Express Mode + Aurora Serverless Starter Kit with Auth0
 
 This repository contains a production-ready boilerplate for deploying Python FastAPI applications on **AWS ECS Express Mode** (preview) backed by **Aurora Serverless v2**, with pre-configured **Auth0 SSO** integration.
