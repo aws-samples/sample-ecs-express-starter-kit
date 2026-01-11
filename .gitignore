@@ -4,6 +4,6 @@ iac/.terraform.lock.hcl
 notes.txt
 iac/terraform.tfvars
 app/.venv
-__pycache__
+__pycache__/
 .kiro/
 bd-narrative/
