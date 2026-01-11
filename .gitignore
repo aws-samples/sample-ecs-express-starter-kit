@@ -6,3 +6,4 @@ iac/terraform.tfvars
 app/.venv
 __pycache__
 .kiro/
+bd-narrative/
