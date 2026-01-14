@@ -8,3 +8,6 @@ __pycache__/
 .kiro/
 bd-narrative/
 iac-cli/
+.private
+
+
