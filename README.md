@@ -34,22 +34,33 @@ graph TD
 ## 🚀 Quick Start
 
 ### 1. Prerequisites
+
 *   AWS CLI installed and configured.
 *   Terraform installed.
 *   Docker installed.
 *   An [Auth0](https://auth0.com/) account (Free tier works).
 
 ### 2. Auth0 Configuration
-Before deploying, set up your Identity Provider:
+Before deploying, set up your Identity Provider in Okta (Auth0) for Single Sign-On (SSO).
+Create an Auth0 app for local dev now, then add ECS Application URLs after deployment.
 
 1.  **Create Application**: In Auth0 Dashboard, create a "Regular Web Application".
-2.  **Settings**:
-    *   **Allowed Callback URLs**: `http://localhost:8000/auth/callback` (for local dev)
-    *   **Allowed Logout URLs**: `http://localhost:8000` (for local dev)
-    *   *Note: You will return here to add the AWS ECS URLs after deployment.*
-3.  **Advanced Settings**:
-    *   Under **OAuth**, ensure **JsonWebToken Signature Algorithm** is set to `RS256`.
-4.  **Credentials**: Note down your `Domain`, `Client ID`, and `Client Secret`.
+    * Auth0 Dashboard → **Applications** → **Create Application** → **Regular Web Application**
+2.  **Configure App Settings using the following parameters**
+    *   **Local dev URLs**:
+        *   **Allowed Callback URLs**: `http://localhost:8000/auth/callback` (for local dev)
+        *   **Allowed Logout URLs**: `http://localhost:8000` (for local dev)
+        *   *Note: You will return here to add the AWS ECS URLs after deployment.*
+    *   **Advanced Settings → OAuth**: set **JSON Web Token (JWT) Signature Algorithm** to `RS256`.
+3.  **Note down your `Domain`, `Client ID`, and `Client Secret`**
+
+    | Value | Where to find it |
+    | --- | --- |
+    | Domain | Application settings page |
+    | Client ID | Application settings page |
+    | Client Secret | Application settings page |
+
+**Return after deployment:** add the AWS ECS URLs to **Allowed Callback URLs** and **Allowed Logout URLs**.    
 
 ### 3. Deploy Infrastructure
 The `iac` folder helps you provision all AWS resources using Terraform.
@@ -72,12 +83,35 @@ EOF
 terraform apply
 ```
 
+
+**Warning**
+❌ If you get the following TerraForm error, it is due to cyclic dependency on ECS App to know its logback URL from SSO.
+
+
+```text
+Error: Provider produced inconsistent result after apply
+When applying changes to aws_ecs_express_gateway_service.example, provider "provider[\"registry.terraform.io/hashicorp/aws\"]" produced an unexpected new value: .primary_container[0].environment[0].name ...
+```
+
+Use the following commands to go through this cyclic dependency
+
+```bash
+aws ecs list-services --cluster express-mode-demo --region ap-southeast-2
+
+terraform state rm aws_ecs_express_gateway_service.example
+
+terraform import aws_ecs_express_gateway_service.example [your-arn]
+
+terraform apply --auto-approve
+```
+
 Upon success, Terraform will output your `ingress_paths` (the URL of your app) and `service_arns`.
 
 **⚠️ Important Final Step:**
 Go back to your Auth0 Dashboard and add your new AWS URL to the **Allowed Callback URLs** and **Allowed Logout URLs**:
 *   Callback: `https://<your-ecs-endpoint>/auth/callback`
 *   Logout: `https://<your-ecs-endpoint>`
+
 
 ### 4. Build & Deploy Application
 The `app` folder contains the application code.
