@@ -129,25 +129,24 @@ output "update_auth0_urls" {
 }
 
 
+# Uncomment to auto-update Auth0 URLs during terraform apply:
 # resource "null_resource" "update_auth0_urls" {
 #   depends_on = [aws_ecs_express_gateway_service.example]
-
+#
 #   triggers = {
 #     service_arn = aws_ecs_express_gateway_service.example.service_arn
 #   }
-
+#
 #   provisioner "local-exec" {
 #     command = <<-EOT
-      
 #       echo "Updating ECS service with endpoint: ${aws_ecs_express_gateway_service.example.ingress_paths[0].endpoint}"
-      
-#       # Update the service with correct URLs
 #       aws ecs update-express-gateway-service \
 #         --service-arn ${aws_ecs_express_gateway_service.example.service_arn} \
 #         --region ${var.region} \
 #         --primary-container "image=${var.app_image}, environment=[{name=AUTH0_DOMAIN, value=${var.auth0_domain}}, {name=AUTH0_CLIENT_ID, value=${var.auth0_client_id}}, {name=APP_SECRET_KEY, value=${var.APP_SECRET_GEN}}, {name=AUTH0_CLIENT_SECRET, value=${var.auth0_client_secret}}, {name=AUTH0_LOGOUT_URL,value=http://${local.app_endpoint}},{name=AUTH0_CALLBACK_URL,value=http://${local.app_endpoint}/auth/callback}]"
-
-#       echo "Updated the AUTH URLs. Wait for it to get deployed..."  
+#       echo "Updated the AUTH URLs. Wait for it to get deployed..."
 #     EOT
 #   }
 # }
+
+# Or run: ../iac-cli/update-auth0-urls.sh after terraform apply
