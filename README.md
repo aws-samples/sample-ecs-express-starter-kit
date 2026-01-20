@@ -80,13 +80,12 @@ APP_SECRET_GEN      = "$(openssl rand -hex 32)"
 EOF
 
 # Deploy resources
-terraform apply
+terraform apply --auto-approve
 ```
 
 
 **Warning**
 ❌ If you get the following TerraForm error, it is due to cyclic dependency on ECS App to know its logback URL from SSO.
-
 
 ```text
 Error: Provider produced inconsistent result after apply
@@ -105,7 +104,22 @@ terraform import aws_ecs_express_gateway_service.example [your-arn]
 terraform apply --auto-approve
 ```
 
+### 3a. Update ECS Auth0 URLs (post-deploy)
+Your ECS application service endpoint is only available after `terraform apply`. Update the ECS service environment variables for `AUTH0_CALLBACK_URL` and `AUTH0_LOGOUT_URL` using the Terraform output. You have to do this only for the first time to setup the SSO process.
+
+```bash
+echo "Fetching update command from Terraform output..."
+UPDATE_CMD=$(terraform output -raw update_auth0_urls)
+
+echo "Updating ECS service with correct Auth0 URLs..."
+eval "$UPDATE_CMD"
+
+echo "✅ Auth0 URLs updated successfully. Wait for ECS deployment to complete."
+```
+
 Upon success, Terraform will output your `ingress_paths` (the URL of your app) and `service_arns`.
+
+Make sure the URLs you add in Auth0 match the values you just set on the ECS service.
 
 **⚠️ Important Final Step:**
 Go back to your Auth0 Dashboard and add your new AWS URL to the **Allowed Callback URLs** and **Allowed Logout URLs**:
