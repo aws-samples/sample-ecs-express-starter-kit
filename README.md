@@ -71,7 +71,7 @@ cd iac
 # Initialize Terraform
 terraform init
 
-# Create a secrets file (do not commit this!)
+# Create a secrets file (do not commit this!, see .gitignore)
 cat <<EOF > terraform.tfvars
 auth0_domain        = "dev-your-tenant.us.auth0.com"
 auth0_client_id     = "your-client-id"
