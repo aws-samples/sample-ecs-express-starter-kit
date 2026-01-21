@@ -202,4 +202,4 @@ The boilerplate logic resides in `app/hello-world.py`. To use your own code:
 
 **Redirect Mismatch**:
 *   Verify the `AUTH0_CALLBACK_URL` exactly matches what is in the Auth0 dashboard.
-*   ECS Express Mode runs behind a load balancer. The `auth.py` utility handles the `http` vs `https` translation automatically, but ensure `ENV=production` is set in the cloud environment.
+*   ECS Express Mode runs behind a load balancer. The auth logic in the code handles the `http` vs `https` translation automatically, but ensure `ENV=production` is set in the cloud environment.
