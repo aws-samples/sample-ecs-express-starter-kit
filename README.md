@@ -1,4 +1,4 @@
-**NOTE — Reference only (Not production ready):** This repository is a starter/boilerplate for development and demos. Do NOT use the default configuration, credentials, or secrets in production. 
+**NOTE — Reference only (Not production ready):** This repository is a starter/boilerplate for development and demos. Do NOT use the default configuration, credentials, or secrets in production.
 
 # ECS Express Mode + Aurora Serverless Starter Kit with Auth0
 
@@ -14,12 +14,12 @@ The following diagram illustrates the component architecture:
 graph TD
     User((User)) -->|HTTPS| Auth0[Auth0 Identity Provider]
     User -->|HTTPS| ECS[ECS Express Gateway]
-    
+
     subgraph "AWS Cloud (VPC)"
         ECS -->|Queries| RDS[Aurora Serverless v2]
         ECS -.->|Logs| CW[CloudWatch Logs]
     end
-    
+
     subgraph "Authentication Flow"
         ECS <-->|Validate Code/Tokens| Auth0
     end
@@ -60,7 +60,7 @@ Create an Auth0 app for local dev now, then add ECS Application URLs after deplo
     | Client ID | Application settings page |
     | Client Secret | Application settings page |
 
-**Return after deployment:** add the AWS ECS URLs to **Allowed Callback URLs** and **Allowed Logout URLs**.    
+**Return after deployment:** add the AWS ECS URLs to **Allowed Callback URLs** and **Allowed Logout URLs**.
 
 ### 3. Deploy Infrastructure
 The `iac` folder helps you provision all AWS resources using Terraform.
@@ -95,7 +95,7 @@ When applying changes to aws_ecs_express_gateway_service.example, provider "prov
 Use the following commands to go through this cyclic dependency
 
 ```bash
-aws ecs list-services --cluster express-mode-demo --region ap-southeast-2
+aws ecs list-services --cluster express-mode-demo --region [your-region i.e. us-east-1]
 
 terraform state rm aws_ecs_express_gateway_service.example
 
@@ -132,7 +132,7 @@ The `app` folder contains the application code.
 
 1.  **Authenticate Docker** with your ECR Public registry (or create a private one):
     ```bash
-    aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+    aws ecr-public get-login-password --region [your-region i.e. us-east-1] | docker login --username AWS --password-stdin public.ecr.aws
     ```
 
 2.  **Build and Push**:
