@@ -151,25 +151,26 @@ The `app` folder contains the application code.
 ### Replacing the Sample App
 The boilerplate logic resides in `app/hello-world.py`. To use your own code:
 
-1. **Authentication Logic** the SSO auth logic is in `app/hello-world.py`
-1.1 . Session Middleware
-The app initializes SessionMiddleware at startup. Think of this as giving the application a memory. It creates a secure, encrypted cookie on the user’s browser. This is how the app remembers who the user is after they have logged in, so they don't have to authenticate for every single request.
+1. **Authentication Logic** the SSO auth logic is in `app/hello-world.py`.
 
-2. Auth0 Configuration
-We use the authlib library to handle the conversation with Auth0. The oauth.register block gives our app the credentials (Client ID, Secret, and Domain) it needs to prove its identity to Auth0 and request user information.
+    * **Session Middleware**
+    The app initializes SessionMiddleware at startup. It creates a secure, encrypted cookie on the user’s browser. This is how the app remembers who the user is after they have logged in, so they don't have to authenticate for every single request.
 
-3. The "Bouncer" (Dependency Injection)
-The function get_current_user acts as a security guard.
+    * **Auth0 Configuration**
+    The code use the authlib library to handle the conversation with Auth0. The oauth.register block gives our app the credentials (Client ID, Secret, and Domain) it needs to prove its identity to Auth0 and request user information.
 
-It checks every request for a valid user session.
-If a user is found, the request is allowed through.
-If not, it raises an AuthRequired exception, which automatically redirects the user to the login page and remembers where they were trying to go.
-Usage: You protect a route simply by adding user: dict = Depends(get_current_user) to the function arguments.
-4. The Auth Flow
+    * The function **get_current_user**
+    It acts as a security guard.
+    It checks every request for a valid user session.
+    If a user is found, the request is allowed through.
+    If not, it raises an AuthRequired exception, which automatically redirects the user to the login page and remembers where they were trying to go.
+    Usage: You protect a FastAPI route simply by adding user: dict = Depends(get_current_user) to the function arguments.
 
-Login (/login): Validates the callback URL and sends the user to Auth0’s hosted login page.
-Callback (/auth/callback): This is where Auth0 sends the user back after they successfully log in. The app exchanges the temporary code from Auth0 for a secure token, saves the user info into the Session (cookie), and redirects them to their original destination.
-Logout (/logout): Destroys the local session cookie and notifies Auth0 to end the session on their side as well.
+    * Summary of the **Auth Flow**
+
+    Login (/login): Validates the callback URL and sends the user to Auth0’s hosted login page.
+    Callback (/auth/callback): This is where Auth0 sends the user back after they successfully log in. The app exchanges the temporary code from Auth0 for a secure token, saves the user info into the Session (cookie), and redirects them to their original destination.
+    Logout (/logout): Destroys the local session cookie and notifies Auth0 to end the session on their side as well.
 
 2.  **Edit `hello-world.py`**:
     *   Import `Depends(get_current_user)` from `auth` to protect your routes.
