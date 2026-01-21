@@ -167,7 +167,6 @@ The boilerplate logic resides in `app/hello-world.py`. To use your own code:
     Usage: You protect a FastAPI route simply by adding user: dict = Depends(get_current_user) to the function arguments.
 
     * Summary of the **Auth Flow**
-
     Login (/login): Validates the callback URL and sends the user to Auth0’s hosted login page.
     Callback (/auth/callback): This is where Auth0 sends the user back after they successfully log in. The app exchanges the temporary code from Auth0 for a secure token, saves the user info into the Session (cookie), and redirects them to their original destination.
     Logout (/logout): Destroys the local session cookie and notifies Auth0 to end the session on their side as well.
