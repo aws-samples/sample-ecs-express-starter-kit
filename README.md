@@ -220,8 +220,7 @@ terraform destroy --auto-approve
 **Stuck Resources (VPC deletion hangs)**:
 If terraform destroy times out or fails to delete the VPC (usually due to "DependencyViolation" or stuck Network Interfaces), follow these manual steps:
 
-* Delete Load Balancers: Go to EC2 Console -> Load Balancers and delete the ELB associated with this stack.
-* Delete Target Groups: Go to EC2 Console -> Target Groups and delete them.
+* Delete Load Balancers: Go to EC2 Console -> Load Balancers and delete the Load Balancer associated with this stack.
 * Delete VPC: Go to VPC Console, select the VPC created by this stack, and clicking Delete VPC.
 **Note**: This "Delete VPC" wizard automatically finds and deletes attached dependencies like Subnets, Internet Gateways, and Security Groups which Terraform might be struggling to remove.
 
