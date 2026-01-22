@@ -172,7 +172,7 @@ The boilerplate logic resides in `app/hello-world.py`. To use your own code:
     Logout (/logout): Destroys the local session cookie and notifies Auth0 to end the session on their side as well.
 
 2.  **Edit `hello-world.py`**:
-    *   Import `Depends(get_current_user)` from `auth` to protect your routes.
+    *   Use `Depends(get_current_user)` to protect your routes.
     *   Add your own business logic and API endpoints.
 3.  **Update `requirements.txt`**: Add any new dependencies your app needs.
 
@@ -194,6 +194,19 @@ The boilerplate logic resides in `app/hello-world.py`. To use your own code:
     ```
 3.  Visit `http://localhost:8000`.
 
+
+## 🗑 Cleanup / Destroy Infrastructure
+
+To tear down the environment and avoid future costs:
+
+### 1. Standard Destruction
+Run the terraform destroy command:
+
+```bash
+cd iac
+terraform destroy --auto-approve
+```
+
 ## 🛠 Troubleshooting
 
 **"Key not found" Error**:
@@ -203,3 +216,12 @@ The boilerplate logic resides in `app/hello-world.py`. To use your own code:
 **Redirect Mismatch**:
 *   Verify the `AUTH0_CALLBACK_URL` exactly matches what is in the Auth0 dashboard.
 *   ECS Express Mode runs behind a load balancer. The auth logic in the code handles the `http` vs `https` translation automatically, but ensure `ENV=production` is set in the cloud environment.
+
+**Stuck Resources (VPC deletion hangs)**:
+If terraform destroy times out or fails to delete the VPC (usually due to "DependencyViolation" or stuck Network Interfaces), follow these manual steps:
+
+* Delete Load Balancers: Go to EC2 Console -> Load Balancers and delete the ELB associated with this stack.
+* Delete Target Groups: Go to EC2 Console -> Target Groups and delete them.
+* Delete VPC: Go to VPC Console, select the VPC created by this stack, and clicking Delete VPC.
+**Note**: This "Delete VPC" wizard automatically finds and deletes attached dependencies like Subnets, Internet Gateways, and Security Groups which Terraform might be struggling to remove.
+
