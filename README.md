@@ -218,9 +218,10 @@ terraform destroy --auto-approve
 *   ECS Express Mode runs behind a load balancer. The auth logic in the code handles the `http` vs `https` translation automatically, but ensure `ENV=production` is set in the cloud environment.
 
 **Stuck Resources (VPC deletion hangs)**:
-If terraform destroy times out or fails to delete the VPC (usually due to "DependencyViolation" or stuck Network Interfaces), follow these manual steps:
+If terraform destroy times out or fails to delete the VPC (usually due to "DependencyViolation" or stuck Network Interfaces), run this script before attempting terraform destroy again:
+**Note** that this script will delete IGW and Load Balancer with tag Name=express-mode-demo
 
-* Delete Load Balancers: Go to EC2 Console -> Load Balancers and delete the Load Balancer associated with this stack.
-* Delete VPC: Go to VPC Console, select the VPC created by this stack, and clicking Delete VPC.
-**Note**: This "Delete VPC" wizard automatically finds and deletes attached dependencies like Subnets, Internet Gateways, and Security Groups which Terraform might be struggling to remove.
-
+```bash
+./delete-by-tag.sh
+terraform destroy --auto-approve
+```
