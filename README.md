@@ -95,11 +95,15 @@ When applying changes to aws_ecs_express_gateway_service.example, provider "prov
 Use the following commands to go through this cyclic dependency
 
 ```bash
-aws ecs list-services --cluster express-mode-demo --region [your-region i.e. us-east-1]
+aws ecs list-services --cluster express-mode-demo --region [your-region i.e. ap-southeast-2] 
+#optionally use jq to get the value
+#export ARN=$(aws ecs list-services --cluster express-mode-demo --region [your-region i.e. ap-southeast-2] | jq -r ".serviceArns[0]")
 
 terraform state rm aws_ecs_express_gateway_service.example
 
 terraform import aws_ecs_express_gateway_service.example [your-arn]
+#use the variable saved in the command above using jq
+#terraform import aws_ecs_express_gateway_service.example $ARN
 
 terraform apply --auto-approve
 ```

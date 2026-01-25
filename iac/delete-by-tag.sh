@@ -6,6 +6,7 @@ TAG_KEY="Name"
 TAG_VALUE="express-mode-demo"
 
 export AWS_REGION=ap-southeast-2
+echo "*** Deleting for the REGION ${AWS_REGION}... ***"
 
 # -- Delete Load Balancers --
 echo "Finding Load Balancers with tag $TAG_KEY=$TAG_VALUE..."
