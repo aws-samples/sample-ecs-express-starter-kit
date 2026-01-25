@@ -34,6 +34,9 @@ resource "aws_rds_cluster" "aurora_serverless" {
   master_username        = var.db_username
   master_password        = random_password.db_password.result
   database_name          = var.db_name
+
+  backup_retention_period = 1
+  preferred_backup_window = "03:00-04:00"
   skip_final_snapshot     = true
   db_subnet_group_name    = aws_db_subnet_group.aurora.name
   vpc_security_group_ids  = [aws_security_group.db.id]
@@ -57,8 +60,10 @@ resource "aws_rds_cluster_instance" "aurora_serverless" {
   
   instance_class       = "db.serverless"
   
-  # disable ehanced monitoring
-  monitoring_interval  = 0
+  auto_minor_version_upgrade   = true
+  performance_insights_enabled = false  # Adds cost if enabled
+  monitoring_interval          = 0        # disable ehanced monitoring
+
 
   tags = local.common_tags
 }
