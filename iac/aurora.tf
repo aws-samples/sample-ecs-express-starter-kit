@@ -37,6 +37,8 @@ resource "aws_rds_cluster" "aurora_serverless" {
 
   backup_retention_period = 1
   preferred_backup_window = "03:00-04:00"
+  deletion_protection = false
+  apply_immediately =  true
   skip_final_snapshot     = true
   db_subnet_group_name    = aws_db_subnet_group.aurora.name
   vpc_security_group_ids  = [aws_security_group.db.id]
@@ -64,6 +66,7 @@ resource "aws_rds_cluster_instance" "aurora_serverless" {
   performance_insights_enabled = false  # Adds cost if enabled
   monitoring_interval          = 0        # disable ehanced monitoring
 
+  apply_immediately =  true
 
   tags = local.common_tags
 }

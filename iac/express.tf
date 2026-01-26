@@ -99,6 +99,11 @@ resource "aws_ecs_express_gateway_service" "example" {
       primary_container[0].command
     ]
   }
+
+  # depends_on = [
+  #   aws_subnet.public,
+  #   aws_internet_gateway.main
+  # ]  
   
   tags = local.common_tags
 }
@@ -117,16 +122,26 @@ output "service_arns" {
 
 output "update_auth0_urls" {
     value = join("", [
-             "aws ecs update-express-gateway-service ", 
+             "aws ecs update-express-gateway-service ",
              "--service-arn ${aws_ecs_express_gateway_service.example.service_arn} ",
              "--region ${var.region} ",
-            "--primary-container 'image=${var.app_image}, environment=[{name=AUTH0_DOMAIN, value=${var.auth0_domain}}, {name=AUTH0_CLIENT_ID, value=${var.auth0_client_id}}, {name=APP_SECRET_KEY, value=${var.APP_SECRET_GEN}}, {name=AUTH0_CLIENT_SECRET, value=${var.auth0_client_secret}}, {name=AUTH0_LOGOUT_URL,value=http://${local.app_endpoint}},{name=AUTH0_CALLBACK_URL,value=http://${local.app_endpoint}/auth/callback}]'",
-
+             "--primary-container 'image=${var.app_image},environment=[{name=AUTH0_DOMAIN,value=${var.auth0_domain}},{name=AUTH0_CLIENT_ID,value=${var.auth0_client_id}},{name=APP_SECRET_KEY,value=${var.APP_SECRET_GEN}},{name=AUTH0_CLIENT_SECRET,value=${var.auth0_client_secret}},{name=AUTH0_LOGOUT_URL,value=https://${local.app_endpoint}},{name=AUTH0_CALLBACK_URL,value=https://${local.app_endpoint}/auth/callback}]'",
             ])
-    sensitive= true
-
-
+    sensitive = true
 }
+
+# output "update_auth0_urls" {
+#     value = join("", [
+#              "aws ecs update-express-gateway-service ", 
+#              "--service-arn ${aws_ecs_express_gateway_service.example.service_arn} ",
+#              "--region ${var.region} ",
+#             "--primary-container 'image=${var.app_image}, environment=[{name=AUTH0_DOMAIN, value=${var.auth0_domain}}, {name=AUTH0_CLIENT_ID, value=${var.auth0_client_id}}, {name=APP_SECRET_KEY, value=${var.APP_SECRET_GEN}}, {name=AUTH0_CLIENT_SECRET, value=${var.auth0_client_secret}}, {name=AUTH0_LOGOUT_URL,value=http://${local.app_endpoint}},{name=AUTH0_CALLBACK_URL,value=http://${local.app_endpoint}/auth/callback}]'",
+
+#             ])
+#     sensitive= true
+
+
+# }
 
 
 # Uncomment to auto-update Auth0 URLs during terraform apply:
