@@ -1,13 +1,27 @@
-FROM python:3.12-slim
+FROM amazonlinux:2023
 
 WORKDIR /app
 
+# Install Python 3.12, pip and user tools
+RUN dnf install -y python3.12 python3.12-pip shadow-utils && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+# Create non-root user for security
+RUN useradd -r -s /bin/false appuser
+
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python3.12 -m pip install --no-cache-dir -r requirements.txt
 
 COPY hello-world.py .
 
+# Switch to non-root user
+USER appuser
+
 EXPOSE 8000
+
+# CMD ["python3.12", "-m", "uvicorn", "hello-world:app", "--host", "0.0.0.0", "--port", "8000"]
+
 
 CMD ["uvicorn", "hello-world:app", "--host", "0.0.0.0", "--port", "8000"]
 
