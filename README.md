@@ -13,7 +13,7 @@ The following diagram illustrates the component architecture:
 ```mermaid
 graph TD
     User((User)) -->|HTTPS| Auth0[Auth0 Identity Provider]
-    User -->|HTTPS| ECS[ECS Express Gateway]
+    User -->|HTTPS| ECS[ECS]
 
     subgraph "AWS Cloud (VPC)"
         ECS -->|Queries| RDS[Aurora Serverless v2]
