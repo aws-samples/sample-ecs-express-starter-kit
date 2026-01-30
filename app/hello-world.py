@@ -124,7 +124,11 @@ def query_table(user: dict = Depends(get_current_user)):
         return {"users": [row[0] for row in rows]}
     except Exception as e:
         return {"error": str(e)}
-
+        
+@app.get("/user")
+def get_user_info(user: dict = Depends(get_current_user)):
+    """Display all authentication info of the current user"""
+    return {"user": user}
 
 @app.get("/health")
 def health_check():
