@@ -1,3 +1,6 @@
+[![en](https://img.shields.io/badge/lang-English-blue.svg)](README.md)
+[![ja](https://img.shields.io/badge/lang-日本語-red.svg)](README_jp.md)
+
 **注意 — 動作確認用（本番環境向けではありません）：** このリポジトリは開発およびデモ用のスターター/ボイラープレートです。デフォルトの設定、認証情報、シークレットを本番環境で使用しないでください。
 
 # ECS Express Mode + Aurora Serverless スターターキット（Auth0 対応）
