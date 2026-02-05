@@ -111,6 +111,17 @@ terraform apply --auto-approve
 ### 3a. Update ECS Auth0 URLs (post-deploy)
 Your ECS application service endpoint is only available after `terraform apply`. Update the ECS service environment variables for `AUTH0_CALLBACK_URL` and `AUTH0_LOGOUT_URL` using the Terraform output. You have to do this only for the first time to setup the SSO process.
 
+**⚠️ AWS CLI Version Requirement:**
+The `update-express-gateway-service` command requires AWS CLI **2.33.15 or later**. Older versions will show an `Invalid choice` error.
+
+```bash
+# Check version
+aws --version
+
+# Upgrade (if using Homebrew)
+brew upgrade awscli
+```
+
 ```bash
 echo "Fetching update command from Terraform output..."
 UPDATE_CMD=$(terraform output -raw update_auth0_urls)
