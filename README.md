@@ -1,7 +1,8 @@
 [![en](https://img.shields.io/badge/lang-English-blue.svg)](README.md)
 [![ja](https://img.shields.io/badge/lang-日本語-red.svg)](README_jp.md)
 
-**NOTE — Reference only (Not production ready):** This repository is a starter/boilerplate for development and demos. Do NOT use the default configuration, credentials, or secrets in production.
+> [!WARNING]
+  Reference only (Not production ready): This repository is a starter/boilerplate for development and demos. Do NOT use the default configuration, credentials, or secrets in production.
 
 # ECS Express Mode + Aurora Serverless Starter Kit with Auth0
 
