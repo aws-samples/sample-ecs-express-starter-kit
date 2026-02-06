@@ -1,4 +1,8 @@
-**NOTE — Reference only (Not production ready):** This repository is a starter/boilerplate for development and demos. Do NOT use the default configuration, credentials, or secrets in production.
+[![en](https://img.shields.io/badge/lang-English-blue.svg)](README.md)
+[![ja](https://img.shields.io/badge/lang-日本語-red.svg)](README_jp.md)
+
+> [!WARNING]
+  Reference only (Not production ready): This repository is a starter/boilerplate for development and demos. Do NOT use the default configuration, credentials, or secrets in production.
 
 # ECS Express Mode + Aurora Serverless Starter Kit with Auth0
 
@@ -110,6 +114,17 @@ terraform apply --auto-approve
 
 ### 3a. Update ECS Auth0 URLs (post-deploy)
 Your ECS application service endpoint is only available after `terraform apply`. Update the ECS service environment variables for `AUTH0_CALLBACK_URL` and `AUTH0_LOGOUT_URL` using the Terraform output. You have to do this only for the first time to setup the SSO process.
+
+**⚠️ AWS CLI Version Requirement:**
+The `update-express-gateway-service` command requires AWS CLI **2.33.15 or later**. Older versions will show an `Invalid choice` error.
+
+```bash
+# Check version
+aws --version
+
+# Upgrade (if using Homebrew)
+brew upgrade awscli
+```
 
 ```bash
 echo "Fetching update command from Terraform output..."

@@ -1,6 +1,6 @@
 resource "random_password" "db_password" {
-  length  = var.password_length
-  special = true
+  length           = var.password_length
+  special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
 
 }
@@ -9,7 +9,7 @@ resource "aws_secretsmanager_secret" "db_password" {
   name = "ecs-express-db-credentials"
   # this is to makes ure that tf destroy doesnt keep the secret in deleted state for 7 days. use with caution in prod though
   recovery_window_in_days = 0
-  tags = local.common_tags
+  tags                    = local.common_tags
 }
 
 resource "aws_secretsmanager_secret_version" "db_password_version" {
@@ -28,24 +28,24 @@ resource "aws_db_subnet_group" "aurora" {
 }
 
 resource "aws_rds_cluster" "aurora_serverless" {
-  cluster_identifier      = "ecs-express-aurora-serverless"
-  engine                 = "aurora-postgresql"
-  engine_mode            = "provisioned"
-  master_username        = var.db_username
-  master_password        = random_password.db_password.result
-  database_name          = var.db_name
+  cluster_identifier = "ecs-express-aurora-serverless"
+  engine             = "aurora-postgresql"
+  engine_mode        = "provisioned"
+  master_username    = var.db_username
+  master_password    = random_password.db_password.result
+  database_name      = var.db_name
 
   backup_retention_period = 1
   preferred_backup_window = "03:00-04:00"
-  deletion_protection = false
-  apply_immediately =  true
+  deletion_protection     = false
+  apply_immediately       = true
   skip_final_snapshot     = true
   db_subnet_group_name    = aws_db_subnet_group.aurora.name
   vpc_security_group_ids  = [aws_security_group.db.id]
 
   serverlessv2_scaling_configuration {
-    min_capacity           = 0
-    max_capacity           = 2
+    min_capacity             = 0
+    max_capacity             = 2
     seconds_until_auto_pause = 300
   }
 
@@ -54,19 +54,19 @@ resource "aws_rds_cluster" "aurora_serverless" {
 }
 
 resource "aws_rds_cluster_instance" "aurora_serverless" {
-  count                = 1
-  identifier           = "${aws_rds_cluster.aurora_serverless.cluster_identifier}-${count.index}"
-  cluster_identifier   = aws_rds_cluster.aurora_serverless.id
-  engine               = aws_rds_cluster.aurora_serverless.engine
-  engine_version       = aws_rds_cluster.aurora_serverless.engine_version
-  
-  instance_class       = "db.serverless"
-  
-  auto_minor_version_upgrade   = true
-  performance_insights_enabled = false  # Adds cost if enabled
-  monitoring_interval          = 0        # disable ehanced monitoring
+  count              = 1
+  identifier         = "${aws_rds_cluster.aurora_serverless.cluster_identifier}-${count.index}"
+  cluster_identifier = aws_rds_cluster.aurora_serverless.id
+  engine             = aws_rds_cluster.aurora_serverless.engine
+  engine_version     = aws_rds_cluster.aurora_serverless.engine_version
 
-  apply_immediately =  true
+  instance_class = "db.serverless"
+
+  auto_minor_version_upgrade   = true
+  performance_insights_enabled = false # Adds cost if enabled
+  monitoring_interval          = 0     # disable ehanced monitoring
+
+  apply_immediately = true
 
   tags = local.common_tags
 }
